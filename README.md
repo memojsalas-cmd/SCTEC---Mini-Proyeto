@@ -1,4 +1,4 @@
-# MiniProjeto DataView
+# Projeto DataView
 
 ## Sobre o projeto 
 O DataView PY é um projeto de análise exploratória de dados (EDA) de vendas, desenvolvido em Python em um notebook. O notebook lê, limpa, transforma, analisa e visualiza um dataset de vendas, gerando métricas e insights.
