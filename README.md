@@ -25,7 +25,8 @@ Praticar os principais conceitos:
 - Detecção e tratamento de outliers (IQR ou z-score)
 - Matplotlib e Seaborn: gráficos, customização e exportação em PNG - Uso básico do GitHub
 
-  ## Como executar ### No Google Colab (recomendado)
+  ## Como executar
+  ### No Google Colab (recomendado)
 1. Faça upload do notebook dataview.ipynb
 2. Abra o arquivo carregado no Colab
 3. Execute as células na ordem, de cima para baixo 30
