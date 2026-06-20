@@ -27,13 +27,13 @@ Praticar os principais conceitos:
 
   ## Como executar
   ### No Google Colab (recomendado)
- 1. Faça upload do notebook dataview.ipynb
- 2. Abra o arquivo carregado no Colab
- 3. Execute as células na ordem, de cima para baixo
+ 1- Faça upload do notebook dataview.ipynb
+ 2- Abra o arquivo carregado no Colab
+ 3- Execute as células na ordem, de cima para baixo
    
    ### Localmente com VS Code
- 1. Instale o Python 3.10+ e o VS Code.
- 2. Instale as dependências: pip install pandas numpy matplotlib seaborn
+ 1- Instale o Python 3.10+ e o VS Code.
+ 2- Instale as dependências: pip install pandas numpy matplotlib seaborn
 
 ## Estrutura do projeto
 ```text
