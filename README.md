@@ -47,7 +47,7 @@ projeto/
 | | |-- v2_outliers_tratado/            # Limpeza v1 + tratamento de outliers 
 | |-- final/                            # Dataset escolhido para uso futuro 
 |-- notebooks/ 
-| |-- dataview.ipynb                    # Notebook principal de EDA 
+| |-- dataview.py                       # Notebook principal de EDA 
 |-- outputs/
 | |-- metricas_por_mes.csv 
 | |-- segmentacao_clientes.csv 
