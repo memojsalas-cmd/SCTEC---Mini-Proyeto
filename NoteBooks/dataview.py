@@ -146,3 +146,65 @@ df_v1 . to_csv ( "data/processed/v1_com_outliers/vendas_v1.csv" , index = False 
 print ( "\nv1 salva em data/processed/v1_com_outliers/" )
 df_v1 . head ()
   
+##RF04 – Detectar e Tratar Outliers (versões v1 e v2)
+
+#● v1_com_outliers/ — os dados limpos da RF03, com os outliers mantidos;
+#● v2_outliers_tratado/ — a mesma base da v1, agora com os outliers tratados (removidos ou substituídos).
+
+def tratar_outliers ( df , colunas , fator = 1.5 , metodo = 'remover' ):
+  #""" Trata outliers de colunas numéricas usando o Intervalo Interquartil (IQR).
+#Parâmetros:
+#colunas : lista de colunas numéricas a verificar
+#fator : multiplicador do IQR para definir os limites (padrão=1.5)
+#metodo : 'remover' exclui as linhas com outliers; 'limitar' aplica winsorização (substitui pelo limite)
+#Retorna o DataFrame tratado sem modificar o original (usa .copy()). """
+
+  df = df.copy()
+  # garante que df_v1 não seja alterado fora da função
+  for col in colunas:
+    # Q1 = 25% dos dados estão abaixo desse valor
+    # Q3 = 75% dos dados estão abaixo desse valor 10
+    q1 = df[col].quantile( 0.25 )
+    q3 = df[col].quantile( 0.75 )
+    iqr = q3 - q1 # largura do intervalo central (50% dos dados)
+    lim_inf = q1 - fator * iqr # abaixo disso = outlier inferior
+    lim_sup = q3 + fator * iqr # acima disso = outlier superior
+
+    # Conta quantas linhas estão fora dos limites (| = OR lógico)
+    n_out = ((df[col] < lim_inf) | (df[col] > lim_sup)). sum ()
+    print(f'{col} : {n_out} outliers detectados (lim_inf={lim_inf:.2f}, lim_sup={lim_sup:.2f})')
+
+
+    if metodo == 'remover' :
+      # Mantém apenas as linhas dentro dos limites
+      df = df[(df[col] >= lim_inf) & (df[col] <= lim_sup)]
+    else :
+      # Winsorização: em vez de remover, "apara" os valores extremos # pelo limite — nenhuma linha é perdida, só os valores mudam.
+      df[col] = df[col].clip(lower=lim_inf, upper=lim_sup)
+
+  return df
+
+  # Problema: 'receita_total' (quantidade × preco_unitario) ainda não existe
+  # em df_v1 — ela só será criada oficialmente no RF05. Mas queremos detectar
+  # outliers de receita aqui, antes de derivar colunas.
+  # Solução: criamos uma cópia temporária (df_v1_tmp) só para o cálculo # de outliers, e depois descartamos a coluna. Assim o RF05 recria
+  # 'receita_total' de forma consistente para toda a análise posterior.
+  # Cópia temporária para calcular receita_total sem alterar df_v1
+
+df_v1_tmp = df_v1.copy()
+df_v1_tmp[ "receita_total" ] = df_v1_tmp[ "quantidade" ] * df_v1_tmp[ "preco_unitario" ]
+
+# Detecta e remove outliers em quantidade e receita_total
+# (preco_unitario não é tratado separadamente porque seu efeito
+# já aparece em receita_total junto com quantidade)
+
+df_v2 = tratar_outliers( df_v1_tmp, colunas=[ "quantidade" , "receita_total" ], metodo= 'remover' )
+# Remove a coluna temporária: ela será recriada no RF05 sobre df_v2 limpo
+df_v2 = df_v2.drop(columns=[ "receita_total" ])
+# Comparativo de linhas para confirmar quantos outliers foram removidos
+print(f"\nv1 = {len(df_v1)} linhas (com outliers)")
+print(f"v2 = {len(df_v2)} linhas (outliers removidos)")
+print(f"Diferença = {len(df_v1) - len(df_v2)} linhas removidas")
+os.makedirs( "data/processed/v2_outliers_tratado" , exist_ok= True )
+df_v2.to_csv( "data/processed/v2_outliers_tratado/vendas_v2.csv" , index= False )
+print ( "\nv2 salva em data/processed/v2_outliers_tratado/" )
