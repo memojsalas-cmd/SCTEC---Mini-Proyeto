@@ -44,5 +44,23 @@ df_bruto = gerar_dataset_vendas()
 os.makedirs( 'data/raw' , exist_ok= True )
 # Adicionado para garantir que o diretório exista
 df_bruto.to_csv( "data/raw/vendas.csv" , index= False )
-print (f"Dataset gerado com { len (df_bruto)} registros." )
+print (f"Dataset gerado com {len (df_bruto)} registros." )
 print (df_bruto.head())
+
+## RF02 – Inspecionar e Descrever os Dados
+def inspecionar_dados(df_bruto):
+
+    #Exibe informações básicas do DataFrame.
+
+    print("\n=== INSPEÇÃO INICIAL DO DATASET ===")
+    print(f"Shape: {df_bruto.shape}")
+    print(f"\nColunas: {list(df_bruto.columns)}")
+    print(f"\nTipos de dados:\n{df_bruto.dtypes}")
+    print(f"\nValores nulos por coluna:\n{df_bruto.isnull().sum()}")
+    print(f"\nPrimeiros registros:\n{df_bruto.head()}")
+    print(f"\nEstatísticas descritivas:\n{df_bruto.describe()}")
+
+    return df_bruto.describe(include="all").round(2)
+
+inspecionar_dados(df_bruto)
+
