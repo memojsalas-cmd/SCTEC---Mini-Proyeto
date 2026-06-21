@@ -487,3 +487,34 @@ def gerar_visualizacoes ( df , metricas , output_dir = "outputs/graficos" ):
   print ( f"4 gráficos salvos em: {output_dir} " )
 
 gerar_visualizacoes(df, metricas)
+
+#RF10 – Organizar o Código em Funções Reutilizáveis
+
+#O notebook está organizado de acordo com essas diretrizes. Para cada etapa da análise, criei uma função dedicada, conforme solicitado:
+
+#- Criação de Funções para cada etapa: As funções gerar_dataset_vendas, inspecionar_dados, limpar_dados, tratar_outliers, criar_colunas_derivadas, calcular_metricas, segmentar_clientes, calcular_estatisticas_numpy e gerar_visualizacoes encapsulam todo o fluxo de análise.
+
+#- Documentação com Docstrings: Todas as funções possuem docstrings detalhadas, explicando seu propósito e como funcionam.
+
+#- Reutilização de Funções: A função limpar_dados é um exemplo de função reutilizada. Além disso, a arquitetura de passar df e metricas entre as funções criar_colunas_derivadas, calcular_metricas, segmentar_clientes, calcular_estatisticas_numpy e gerar_visualizacoes demonstra a reutilização do DataFrame principal e das métricas calculadas em diferentes contextos de análise e visualização.
+
+#- Uso de Função Lambda: A segmentação de clientes na função segmentar_clientes utiliza uma expressão lambda para classificar os clientes com base em seus gastos totais.
+
+
+
+
+#- função de ordem superior
+
+#Uma função de ordem superior é uma função que **recebe outra função como argumento** (chamado de *callback*). 
+#Exemplo. `aplicar_transformacao(df, coluna, funcao)` aplica qualquer função que você passar a uma coluna. No exemplo, 
+#passamos uma `lambda` que classifica a venda em "Alto" ou "Normal". A vantagem: em vez de criar uma função nova para cada transformação,
+#criamos **uma** que aceita qualquer regra.
+
+def aplicar_transformacao(df, coluna, funcao):
+    """Funcao de ordem superior: aplica qualquer funcao/lambda a uma coluna."""
+    df = df.copy(); df[f"{coluna}_transformado"] = df[coluna].apply(funcao)
+    return df
+
+_demo = aplicar_transformacao(df, "receita_total", lambda x: "Alto" if x > 2000 else "Normal")
+_demo[["receita_total","receita_total_transformado"]].head()
+
