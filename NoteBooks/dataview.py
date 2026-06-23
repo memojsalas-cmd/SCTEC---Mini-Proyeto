@@ -530,6 +530,8 @@ def aplicar_transformacao(df, coluna, funcao):
 _demo = aplicar_transformacao(df, "receita_total", lambda x: "Alto" if x > 2000 else "Normal")
 #_demo[["receita_total","receita_total_transformado"]].head()
 print(_demo[["receita_total","receita_total_transformado"]].head())
+
+
 #RF11 – Ler e Escrever Arquivos (CSV e JSON)
 
 import json
